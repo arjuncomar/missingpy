@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 {- arch-tag: Python types
 Copyright (C) 2005 John Goerzen <jgoerzen@complete.org>
 
@@ -55,6 +56,7 @@ import Data.Typeable (
                     , mkTyCon
                     , Typeable(..)
                     )
+import Control.Exception
 
 type CPyObject = ()
 
@@ -73,15 +75,11 @@ data PyException = PyException {excType :: PyObject, -- ^ Exception type
                                 excValue :: PyObject, -- ^ Exception value
                                 excTraceBack :: PyObject, -- ^ Traceback
                                 excFormatted :: String -- ^ Formatted for display
-                               }
+                               } deriving Typeable
 instance Show PyException where
-    show x = excFormatted x
+    show = excFormatted 
 
-pyExceptionTc :: TyCon
-pyExceptionTc = mkTyCon "MissingPy.Python.Types.PyException"
-
-instance Typeable PyException where
-    typeOf _ = mkTyConApp pyExceptionTc []
+instance Exception PyException
 
 {- | How to interpret a snippet of Python code. -}
 data StartFrom = Py_eval_input

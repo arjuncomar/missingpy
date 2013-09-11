@@ -1,0 +1,3 @@
+*.buildinfo
+*cabal*sandbox*
+dist/

@@ -1,7 +1,7 @@
 Name: MissingPy
-Version: 0.10.6
+Version: 0.11
 License: MIT
-Maintainer: Matt Brown <matt@softmechanics.net>
+Maintainer: Arjun Comar <nrujac@gmail.com>
 Author: John Goerzen
 license-file: COPYRIGHT
 extra-source-files: COPYING, genexceptions.hs, README, INSTALL,
@@ -9,9 +9,17 @@ extra-source-files: COPYING, genexceptions.hs, README, INSTALL,
 Stability: Alpha
 Copyright: Copyright (c) 2005-2008 John Goerzen
 Synopsis: Haskell interface to Python
-Homepage: http://github.com/softmechanics/missingpy
-Bug-reports: http://github.com/softmechanics/missingpy/issues
-Description:  MissingPy is two things:
+Homepage: http://github.com/arjuncomar/missingpy
+Bug-reports: http://github.com/arjuncomar/missingpy/issues
+Description:  
+ This version of MissingPy is just a low-level Haskell binding to 
+ a Python interpreter (<=2.7). The rest of the original 
+ description still applies. All extra dependencies have been
+ removed to make this change, and exceptions have been updated
+ to the modern system. This of course changes the API a bit.
+
+ Original Description:
+ MissingPy is two things:
  .
  A Haskell binding for many C and Python libraries for tasks such as
  data compression, databases, etc.  This can be found in the
@@ -39,12 +47,9 @@ Library
    Python.Exceptions,
    Python.Exceptions.ExcTypes,
    Python.Objects.File,
-   Python.Objects.Dict,
-   MissingPy.FileArchive.GZip,
-   MissingPy.FileArchive.BZip2,
-   MissingPy.AnyDBM
+   Python.Objects.Dict
   Other-Modules: Python.ForeignImports
-  Build-Depends: base == 4.*, MissingH>=1.0.1, anydbm>=1.0.5
+  Build-Depends: base == 4.*
   C-Sources: glue/glue.c glue/excglue.c
   Extensions: ForeignFunctionInterface, TypeSynonymInstances,
               FlexibleInstances

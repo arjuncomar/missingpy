@@ -20,11 +20,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 module Dicttest(mf, generic_test, tests) where
 import Test.HUnit
 import Data.List.Utils
-import System.IO.HVFS
-import System.IO.HVFS.InstanceHelpers
-import Database.AnyDBM
-import Database.AnyDBM.StringDBM
-import Database.AnyDBM.MapDBM
 import Data.HashTable
 import Data.List(sort)
 import Control.Exception(finally)

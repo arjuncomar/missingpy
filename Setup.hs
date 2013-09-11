@@ -13,7 +13,7 @@ main = defaultMainWithHooks autoconfUserHooks {
          postConf=configure
        }
 
-pyConfigProgram = (simpleProgram "python") 
+pyConfigProgram = (simpleProgram "python2") 
 
 configure _ _ _ lbi = do
   mb_bi <- pyConfigBuildInfo Verbosity.normal lbi

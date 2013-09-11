@@ -56,7 +56,6 @@ import Python.Objects(
 import Python.Utils (withPyObject, checkCInt, fromCPyObject)
 import Foreign (Ptr, nullPtr)
 import Python.Exceptions (catchPy, exc2ioerror)
-import Database.AnyDBM (AnyDBM (..))
 import Python.Types (PyObject, CPyObject)
 
 {- | The basic type for a Python dict or dict-like object. -}
@@ -79,59 +78,3 @@ pydwrap (PyDict pyobj) func = catchPy (func pyobj) exc2ioerror
 {- | Give it a CPyObject instead. -}
 cpydwrap :: PyDict -> (Ptr CPyObject -> IO a) -> IO a
 cpydwrap x func = pydwrap x (\y -> withPyObject y func)
-
-instance AnyDBM PyDict where
-    insertA h k v = 
-        do ko <- toPyObject k
-           kv <- toPyObject v
-           withPyObject ko (\ck ->
-            withPyObject kv (\cv ->
-             cpydwrap h (\cdict ->
-              pyObject_SetItem cdict ck cv >>= checkCInt >> return()
-                     )
-                            )
-                           )
-    deleteA h k = 
-        do ko <- toPyObject k
-           withPyObject ko (\ck ->
-            cpydwrap h (\cdict ->
-             pyObject_DelItem cdict ck >>= checkCInt >> return ()))
-    lookupA h k =
-        do ko <- toPyObject k
-           withPyObject ko (\ck ->
-            cpydwrap h (\cdict ->
-             do r <- pyObject_GetItem cdict ck
-                if r == nullPtr
-                   then do pyErr_Clear -- Ignore this exception
-                           return Nothing
-                   else do retval <- fromCPyObject r >>= fromPyObject
-                           return $ Just retval
-                                  ))
-    {-
-    toListA h =
-        This used to be:
-        pydwrap h fromPyObject
-        but some *dbm's are incompatible with that.  Sigh. -}
-
-    keysA h =
-        cpydwrap h (\ch ->
-         do keysobj <- pyMapping_Keys ch >>= fromCPyObject
-            keys <- (fromPyObject keysobj)::IO [String]
-            return keys
-                   )
-
-    flushA h = pydwrap h (\pyo -> do h <- hasattr pyo "sync"
-                                     if h 
-                                        then runMethodHs pyo "sync" noParms noKwParms
-                                        else return ()
-                         )
-
-    closeA h = pydwrap h (\pyo -> do h <- hasattr pyo "close"
-                                     if h
-                                        then runMethodHs pyo "close" noParms noKwParms
-                                        else return ()
-                         )
-
-                                        
-            
-    
