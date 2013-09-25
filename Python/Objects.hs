@@ -57,6 +57,7 @@ module Python.Objects (
                        pyObject_Call,
                        pyObject_CallHs,
                        pyObject_RunHs,
+                       callMethod,
                        callMethodHs,
                        runMethodHs,
                        noParms,
@@ -203,6 +204,15 @@ callMethodHs_internal pyo method args kwargs =
     do mobj <- getattr pyo method
        pyObject_Hs mobj args kwargs
                             
+{- | Calls the named method of the given object. -}
+callMethod :: (ToPyObject a, ToPyObject b) =>
+              PyObject
+           -> String
+           -> [a]
+           -> [(String, b)]
+           -> IO PyObject
+callMethod = callMethodHs_internal
+
 {- | Calls the named method of the given object. -}
 callMethodHs :: (ToPyObject a, ToPyObject b, FromPyObject c) =>
                 PyObject        -- ^ The main object
